@@ -1,0 +1,31 @@
+name: Build Magisk Module ZIP
+
+on:
+  push:
+    branches:
+      - main  # Adjust if you're using a different branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up zip
+        run: sudo apt-get install zip
+
+      - name: Create ZIP file for Magisk module
+        run: |
+          mkdir -p magisk-module
+          cp -r * magisk-module/
+          cd magisk-module
+          zip -r play_integrity_fix.zip *
+          mv play_integrity_fix.zip ../
+
+      - name: Upload ZIP as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: play_integrity_fix.zip
+          path: play_integrity_fix.zip
